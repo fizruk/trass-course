@@ -1,6 +1,7 @@
 module Trass.Course.Section where
 
 import Control.Applicative
+import Control.Monad
 
 import Data.Text (Text)
 import qualified Data.Text    as Text
@@ -27,7 +28,7 @@ readSection :: FilePath -> IO Section
 readSection path = Section
   <$> pure path
   <*> pure (Text.pack path)
-  <*> maybeReadFile   (path </> "summary.txt")
-  <*> maybeReadFile   (path </> "overview.md")
-  <*> maybeReadFile   (path </> "theory.md")
-  <*> Yaml.decodeFile (path </> "trass.yml")
+  <*> maybeWithFile Text.readFile (path </> "summary.txt")
+  <*> maybeWithFile Text.readFile (path </> "overview.md")
+  <*> maybeWithFile Text.readFile (path </> "theory.md")
+  <*> (join <$> maybeWithFile Yaml.decodeFile (path </> "trass.yml"))

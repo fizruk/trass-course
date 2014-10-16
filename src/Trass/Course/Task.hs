@@ -10,6 +10,8 @@ import qualified Data.Text.IO as Text
 import System.Directory
 import System.FilePath
 
+import Trass.Course.Util
+
 data Task = Task
   { taskPath        :: FilePath
   , taskTitle       :: Text
@@ -19,8 +21,7 @@ data Task = Task
 
 readTasks :: FilePath -> IO [Task]
 readTasks path = do
-  paths     <- map (path </>) <$> getDirectoryContents path
-  dirs      <- filterM doesDirectoryExist paths
+  dirs      <- getSubDirectories path
   taskDirs  <- filterM (doesFileExist . (</> "task.md")) dirs
   mapM readTask taskDirs
 

@@ -8,11 +8,12 @@ module Trass.Course (
 import Control.Applicative
 import Control.Monad
 
-import Trass.Course.Section
-import Trass.Course.Task
-
 import System.Directory
 import System.FilePath
+
+import Trass.Course.Section
+import Trass.Course.Task
+import Trass.Course.Util
 
 data Course = Course
   { courseSection     :: Section
@@ -29,7 +30,6 @@ readCourse path = Course
 
 readSubsections :: FilePath -> IO [Course]
 readSubsections path = do
-  paths       <- map (path </>) <$> getDirectoryContents path
-  dirs        <- filterM doesDirectoryExist paths
+  dirs        <- getSubDirectories path
   courseDirs  <- filterM (doesFileExist . (</> "overview.md")) dirs
   mapM readCourse courseDirs
