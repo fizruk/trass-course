@@ -3,6 +3,8 @@ module Trass.Course (
   module Trass.Course.Task,
 
   Course(..),
+  readCourse,
+  readSubsections,
 ) where
 
 import Control.Applicative
@@ -33,3 +35,4 @@ readSubsections path = do
   dirs        <- getSubDirectories path
   courseDirs  <- filterM (doesFileExist . (</> "overview.md")) dirs
   mapM readCourse courseDirs
+
