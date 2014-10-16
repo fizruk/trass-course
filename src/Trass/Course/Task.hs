@@ -1,22 +1,31 @@
 module Trass.Course.Task where
 
 import Control.Applicative
-import Data.Aeson
+import Control.Monad
+
 import Data.Text (Text)
+import qualified Data.Text    as Text
+import qualified Data.Text.IO as Text
+
+import System.Directory
+import System.FilePath
 
 data Task = Task
-  { taskTitle       :: Text
-  , taskDescription :: FilePath
+  { taskPath        :: FilePath
+  , taskTitle       :: Text
+  , taskDescription :: Text
   }
   deriving (Show)
 
-instance FromJSON Task where
-  parseJSON (Object v) = Task
-                     <$> v .: "title"
-                     <*> v .: "description"
-  parseJSON _ = empty
+readTasks :: FilePath -> IO [Task]
+readTasks path = do
+  paths     <- map (path </>) <$> getDirectoryContents path
+  dirs      <- filterM doesDirectoryExist paths
+  taskDirs  <- filterM (doesFileExist . (</> "task.md")) dirs
+  mapM readTask taskDirs
 
-instance ToJSON Task where
-  toJSON Task{..} = object
-    [ "title"       .= taskTitle
-    , "description" .= taskDescription ]
+readTask :: FilePath -> IO Task
+readTask path = Task
+  <$> pure path
+  <*> pure (Text.pack path)
+  <*> Text.readFile (path </> "task.md")

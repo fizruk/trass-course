@@ -22,13 +22,15 @@ library
     Trass.Course.Section
     Trass.Course.Task
     Trass.Course.Util
-  extensions:
+  default-extensions:
     OverloadedStrings
     RecordWildCards
   build-depends:      base >=4.7 && <4.8
-                    , aeson >= 0.2
                     , text
-                    , unordered-containers
+                    , yaml
+                    , directory
+                    , filepath
+                    , trass-lxc
 
 source-repository head
   type: git

@@ -6,11 +6,13 @@ module Trass.Course (
 ) where
 
 import Control.Applicative
-import Data.Aeson
-import Trass.Course.Util
+import Control.Monad
 
 import Trass.Course.Section
 import Trass.Course.Task
+
+import System.Directory
+import System.FilePath
 
 data Course = Course
   { courseSection     :: Section
@@ -19,16 +21,15 @@ data Course = Course
   }
   deriving (Show)
 
-instance FromJSON Course where
-  parseJSON o@(Object v) = Course
-                       <$> parseJSON o
-                       <*> v .:? "tasks"    .!= []
-                       <*> v .:? "sections" .!= []
-  parseJSON _ = empty
+readCourse :: FilePath -> IO Course
+readCourse path = Course
+  <$> readSection path
+  <*> readTasks path
+  <*> readSubsections path
 
-instance ToJSON Course where
-  toJSON Course{..} = objectUnion
-    (toJSON courseSection)
-    (object
-      [ "tasks"     .= courseTasks
-      , "sections"  .= courseSubsections ])
+readSubsections :: FilePath -> IO [Course]
+readSubsections path = do
+  paths       <- map (path </>) <$> getDirectoryContents path
+  dirs        <- filterM doesDirectoryExist paths
+  courseDirs  <- filterM (doesFileExist . (</> "overview.md")) dirs
+  mapM readCourse courseDirs
