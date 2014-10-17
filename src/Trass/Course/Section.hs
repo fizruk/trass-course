@@ -3,6 +3,8 @@ module Trass.Course.Section where
 import Control.Applicative
 import Control.Monad
 
+import Data.Maybe
+
 import Data.Text (Text)
 import qualified Data.Text    as Text
 import qualified Data.Text.IO as Text
@@ -27,7 +29,7 @@ data Section = Section
 readSection :: FilePath -> IO Section
 readSection path = Section
   <$> pure path
-  <*> pure (Text.pack path)
+  <*> (fromMaybe (Text.pack $ takeFileName path) <$> maybeWithFile Text.readFile (path </> "title.txt"))
   <*> maybeWithFile Text.readFile (path </> "summary.txt")
   <*> maybeWithFile Text.readFile (path </> "overview.md")
   <*> maybeWithFile Text.readFile (path </> "theory.md")

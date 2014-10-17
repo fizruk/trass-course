@@ -3,6 +3,8 @@ module Trass.Course.Task where
 import Control.Applicative
 import Control.Monad
 
+import Data.Maybe
+
 import Data.Text (Text)
 import qualified Data.Text    as Text
 import qualified Data.Text.IO as Text
@@ -28,5 +30,5 @@ readTasks path = do
 readTask :: FilePath -> IO Task
 readTask path = Task
   <$> pure path
-  <*> pure (Text.pack path)
+  <*> (fromMaybe (Text.pack $ takeFileName path) <$> maybeWithFile Text.readFile (path </> "title.txt"))
   <*> Text.readFile (path </> "task.md")
