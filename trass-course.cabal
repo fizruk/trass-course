@@ -2,8 +2,8 @@ name:                trass-course
 version:             0.1
 synopsis:            TRASS course management.
 -- description:         
-homepage:            https://github.com/fizruk/trass-course
-bug-reports:         https://github.com/fizruk/trass-course/issues
+homepage:            https://github.com/trass/trass-course
+bug-reports:         https://github.com/trass/trass-course/issues
 license:             BSD3
 license-file:        LICENSE
 author:              Nickolay Kudasov
@@ -34,5 +34,5 @@ library
 
 source-repository head
   type: git
-  location: https://github.com/fizruk/trass-course.git
+  location: https://github.com/trass/trass-course.git
   branch: master
