@@ -30,7 +30,8 @@ library
                     , yaml
                     , directory
                     , filepath
-                    , trass-lxc
+                    , trass-config
+                    , trass-vm
 
 source-repository head
   type: git

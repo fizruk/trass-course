@@ -12,7 +12,7 @@ import qualified Data.Yaml as Yaml
 
 import System.FilePath
 
-import Trass.Config
+import Trass.VM.Config
 import Trass.Config.Options
 import Trass.Course.Util
 
